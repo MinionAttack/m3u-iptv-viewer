@@ -1,9 +1,21 @@
 "use strict";
 
-async function validateFileFormat(file) {
+async function validateFileFormat(event, fileForm, processButton) {
+    const file = event.target.files[0];
     if (!file) return false;
     let firstTwoLines = await readFirstTwoLines(file);
-    return checkFirstTwoLines(firstTwoLines);
+    const isValid = checkFirstTwoLines(firstTwoLines);
+    if (!isValid) {
+        fileForm.reset();
+        manageButtonStatus(processButton, true, "btn-outline-secondary", "btn-outline-success");
+        const invalidFileModalOptions = {backdrop: 'static', keyboard: false, focus: true}
+        const invalidFileModal = document.getElementById('invalidFileModal');
+        const invalidBootstrapModal = new bootstrap.Modal(invalidFileModal, invalidFileModalOptions);
+        invalidBootstrapModal.show();
+    } else {
+        console.info("The M3U file is valid!");
+        manageButtonStatus(processButton, false, "btn-outline-success", "btn-outline-secondary");
+    }
 }
 
 async function readFirstTwoLines(file) {
@@ -42,4 +54,14 @@ function checkFirstTwoLines(lines) {
         return FIRST_LINE_REGEX.test(lines[0]) && lines[1]?.startsWith("#EXTINF:");
     }
     return false;
+}
+
+function manageButtonStatus(button, isDisabled, classToAdd, classToRemove) {
+    button.disabled = isDisabled;
+    if (button.classList.contains(classToRemove)) {
+        button.classList.remove(classToRemove);
+    }
+    if (!button.classList.contains(classToAdd)) {
+        button.classList.add(classToAdd);
+    }
 }

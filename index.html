@@ -52,8 +52,10 @@
     <div class="container-fluid d-flex flex-wrap align-items-center">
         <a class="navbar-brand" href="#">M3U IPTV Viewer</a>
         <div class="d-flex mx-auto my-2 my-lg-0">
-            <input accept=".m3u" class="form-control me-2" id="fileInput" type="file">
-            <button class="btn btn-outline-success" id="loadButton" type="button">Process</button>
+            <form class="me-2" id="fileForm">
+                <input accept=".m3u" class="form-control" id="fileInput" type="file">
+            </form>
+            <button class="btn btn-outline-secondary" id="processButton" type="button">Process</button>
         </div>
     </div>
 </nav>
