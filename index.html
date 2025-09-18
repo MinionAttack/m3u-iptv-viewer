@@ -43,12 +43,41 @@
     <meta content="yes" name="apple-mobile-web-app-capable">
     <meta content="default" name="apple-mobile-web-app-status-bar-style">
 
-    <!-- Bootstrap -->
+    <!-- CSS -->
     <link href="/css/vendor/bootstrap/bootstrap.min.css" rel="stylesheet"/>
 </head>
 <body>
-<!-- TODO: All -->
-<!-- Bootstrap -->
+<!-- Navbar -->
+<nav class="navbar bg-body-tertiary">
+    <div class="container-fluid d-flex flex-wrap align-items-center">
+        <a class="navbar-brand" href="#">M3U IPTV Viewer</a>
+        <div class="d-flex mx-auto my-2 my-lg-0">
+            <input accept=".m3u" class="form-control me-2" id="fileInput" type="file">
+            <button class="btn btn-outline-success" id="loadButton" type="button">Process</button>
+        </div>
+    </div>
+</nav>
+<!-- Invalid File Modal -->
+<div aria-hidden="true" aria-labelledby="staticBackdropModal" class="modal fade" data-bs-backdrop="static"
+     data-bs-keyboard="false" id="invalidFileModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropModal">Invalid M3U file</h1>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+            </div>
+            <div class="modal-body">
+                The M3U file you wish to process is invalid or incompatible.
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-bs-dismiss="modal" type="button">Accept</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- JavaScript -->
 <script src="/js/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/js/fileValidator.js"></script>
+<script src="/js/main.js"></script>
 </body>
 </html>
