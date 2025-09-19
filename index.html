@@ -45,10 +45,11 @@
 
     <!-- CSS -->
     <link href="/css/vendor/bootstrap/bootstrap.min.css" rel="stylesheet"/>
+    <link href="css/theme.css" rel="stylesheet"/>
 </head>
-<body>
+<body data-bs-theme="light">
 <!-- Navbar -->
-<nav class="navbar bg-body-tertiary">
+<nav class="navbar navbar-light bg-light" id="topNavbar">
     <div class="container-fluid d-flex flex-wrap align-items-center">
         <a class="navbar-brand" href="#">M3U IPTV Viewer</a>
         <div class="d-flex mx-auto my-2 my-lg-0">
@@ -56,6 +57,13 @@
                 <input accept=".m3u" class="form-control" id="fileInput" type="file">
             </form>
             <button class="btn btn-outline-secondary" id="processButton" type="button">Process</button>
+        </div>
+        <div class="d-flex align-items-center mb-0">
+            <label class="me-2" id="sunLabel">☀️</label>
+            <div class="form-check form-switch mb-0">
+                <input class="form-check-input" id="modeToggle" type="checkbox">
+            </div>
+            <label id="moonLabel">🌙</label>
         </div>
     </div>
 </nav>
@@ -65,8 +73,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropModal">Invalid M3U file</h1>
-                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+                <h1 class="modal-title fs-5 mx-auto" id="staticBackdropModal">Invalid M3U file</h1>
             </div>
             <div class="modal-body">
                 The M3U file you wish to process is invalid or incompatible.
@@ -79,6 +86,7 @@
 </div>
 <!-- JavaScript -->
 <script src="/js/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/js/themeManager.js"></script>
 <script src="/js/fileValidator.js"></script>
 <script src="/js/main.js"></script>
 </body>

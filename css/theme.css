@@ -1,0 +1,23 @@
+/* Dark mode for buttons */
+body[data-bs-theme='dark'] .btn-success {
+    background-color: #198754;
+    border-color: #198754;
+    color: #ffffff;
+}
+
+body[data-bs-theme='dark'] .btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: #ffffff;
+}
+
+/* Dark mode for modals */
+body[data-bs-theme='dark'] .modal-content {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+body[data-bs-theme='dark'] .modal-header,
+body[data-bs-theme='dark'] .modal-footer {
+    border-color: #333;
+}
