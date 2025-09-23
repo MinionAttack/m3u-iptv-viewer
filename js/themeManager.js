@@ -31,7 +31,7 @@ function applyTheme(selectedMode) {
 }
 
 function applyDarkThemeToBodyAndNavbar() {
-    body.setAttribute('data-bs-theme', 'dark');
+    body.dataset.bsTheme = 'dark';
     topNavbar.classList.remove('navbar-light', 'bg-light');
     topNavbar.classList.add('navbar-dark', 'bg-dark');
 }
@@ -48,10 +48,10 @@ function applyDarkThemeToModeToggle() {
 }
 
 function applyDarkThemeToModals() {
-    modalsContents.forEach(modalContent => {
+    for (const modalContent of modalsContents) {
         modalContent.classList.remove('bg-light', 'text-dark');
         modalContent.classList.add('bg-dark', 'text-light');
-    });
+    }
 }
 
 function applyDarkThemeToMainContainer() {
@@ -60,14 +60,14 @@ function applyDarkThemeToMainContainer() {
 }
 
 function applyDarkThemeToFooter() {
-    footers.forEach(footer => {
+    for (const footer of footers) {
         footer.classList.remove('bg-light', 'text-dark');
         footer.classList.add('bg-dark', 'text-light');
-    });
+    }
 }
 
 function applyLightThemeToBodyAndNavbar() {
-    body.setAttribute('data-bs-theme', 'light');
+    body.dataset.bsTheme = 'light';
     topNavbar.classList.remove('navbar-dark', 'bg-dark');
     topNavbar.classList.add('navbar-light', 'bg-light');
 }
@@ -84,10 +84,10 @@ function applyLightThemeToModeToggle() {
 }
 
 function applyLightThemeToModals() {
-    modalsContents.forEach(modalContent => {
+    for (const modalContent of modalsContents) {
         modalContent.classList.remove('bg-dark', 'text-light');
         modalContent.classList.add('bg-light', 'text-dark');
-    });
+    }
 }
 
 function applyLightThemeToMainContainer() {
@@ -96,10 +96,10 @@ function applyLightThemeToMainContainer() {
 }
 
 function applyLightThemeToFooter() {
-    footers.forEach(footer => {
+    for (const footer of footers) {
         footer.classList.remove('bg-dark', 'text-light');
         footer.classList.add('bg-light', 'text-dark');
-    });
+    }
 }
 
 // Manual selection.

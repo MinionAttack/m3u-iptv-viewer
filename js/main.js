@@ -5,14 +5,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const savedMode = localStorage.getItem('themeMode');
     if (savedMode) {
         applyTheme(savedMode);
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    } else if (globalThis.matchMedia('(prefers-color-scheme: dark)').matches) {
         applyTheme('dark');
     } else {
         applyTheme('light');
     }
 
     // Listen for OS changes (Only if the user does not manually select the theme).
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+    globalThis.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
         if (!localStorage.getItem('themeMode')) {
             applyTheme(event.matches ? 'dark' : 'light');
         }

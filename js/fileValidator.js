@@ -5,16 +5,16 @@ async function validateFileFormat(event, fileForm, processButton) {
     if (!file) return false;
     let firstTwoLines = await readFirstTwoLines(file);
     const isValid = checkFirstTwoLines(firstTwoLines);
-    if (!isValid) {
+    if (isValid) {
+        console.info('The M3U file is valid!');
+        manageButtonStatus(processButton, false, 'btn-outline-success', 'btn-outline-secondary');
+    } else {
         fileForm.reset();
         manageButtonStatus(processButton, true, 'btn-outline-secondary', 'btn-outline-success');
         const invalidFileModalOptions = {backdrop: 'static', keyboard: false, focus: true}
         const invalidFileModal = document.getElementById('invalidFileModal');
         const invalidBootstrapModal = new bootstrap.Modal(invalidFileModal, invalidFileModalOptions);
         invalidBootstrapModal.show();
-    } else {
-        console.info('The M3U file is valid!');
-        manageButtonStatus(processButton, false, 'btn-outline-success', 'btn-outline-secondary');
     }
 }
 
