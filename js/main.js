@@ -24,6 +24,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const fileForm = document.getElementById('fileForm');
-    const fileInput = document.getElementById('fileInput');
-    fileInput.addEventListener('change', (event) => validateFileFormat(event, fileForm, processButton));
+    const fileSelector = document.getElementById('fileInput');
+    fileSelector.addEventListener('change', (event) => validateFileFormat(event, fileForm, processButton));
 });
