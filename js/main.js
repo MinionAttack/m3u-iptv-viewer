@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
         applyPreferredLocale(savedSelectedLocale);
     } else {
         // Reject locales with a hyphen, for example: en-US, es-ES.
-        const preferredLocales = navigator.languages.filter(language => language.indexOf('-') === -1);
+        const preferredLocales = navigator.languages.filter(language => !language.includes('-'));
         findPreferredBrowserLocales(preferredLocales);
     }
     addListenerToLocaleOptions();
