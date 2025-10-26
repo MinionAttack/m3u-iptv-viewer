@@ -2,6 +2,8 @@
 
 const body = document.body;
 const modalsContents = document.querySelectorAll('.modal-content');
+const i18nDropdown = document.getElementById('localeDropdown');
+const i18nDropdownOptions = document.getElementById('localeDropdownOptions');
 const fileInput = document.getElementById('fileInput');
 const modeToggle = document.getElementById('modeToggle');
 const topNavbar = document.getElementById('topNavbar');
@@ -13,7 +15,8 @@ const footers = document.querySelectorAll('.footer');
 function applyTheme(selectedMode) {
     if (selectedMode === 'dark') {
         applyDarkThemeToBodyAndNavbar();
-        applyDarkThemeFileInput()
+        applyDarkThemeFileInput();
+        applyDarkThemeToLocaleSelector();
         applyDarkThemeToModeToggle();
         applyDarkThemeToMainContainer();
         applyDarkThemeToFooter();
@@ -21,7 +24,8 @@ function applyTheme(selectedMode) {
         saveThemePreference(selectedMode);
     } else {
         applyLightThemeToBodyAndNavbar();
-        applyLightThemeFileInput()
+        applyLightThemeFileInput();
+        applyLightThemeToLocaleSelector();
         applyLightThemeToModeToggle();
         applyLightThemeToMainContainer()
         applyLightThemeToFooter();
@@ -39,6 +43,13 @@ function applyDarkThemeToBodyAndNavbar() {
 function applyDarkThemeFileInput() {
     fileInput.classList.remove('bg-light', 'text-dark');
     fileInput.classList.add('bg-dark', 'text-light');
+}
+
+function applyDarkThemeToLocaleSelector() {
+    i18nDropdown.classList.remove('btn-light');
+    i18nDropdown.classList.add('btn-dark');
+    i18nDropdownOptions.classList.remove('dropdown-menu-light');
+    i18nDropdownOptions.classList.add('dropdown-menu-dark');
 }
 
 function applyDarkThemeToModeToggle() {
@@ -75,6 +86,13 @@ function applyLightThemeToBodyAndNavbar() {
 function applyLightThemeFileInput() {
     fileInput.classList.remove('bg-dark', 'text-light');
     fileInput.classList.add('bg-light', 'text-dark');
+}
+
+function applyLightThemeToLocaleSelector() {
+    i18nDropdown.classList.remove('btn-dark');
+    i18nDropdown.classList.add('btn-light');
+    i18nDropdownOptions.classList.remove('dropdown-menu-dark');
+    i18nDropdownOptions.classList.add('dropdown-menu-light');
 }
 
 function applyLightThemeToModeToggle() {
