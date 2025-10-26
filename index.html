@@ -51,12 +51,29 @@
 <!-- Navbar -->
 <nav class="navbar navbar-light bg-light text-black" id="topNavbar">
     <div class="container-fluid d-flex flex-wrap align-items-center">
-        <a class="navbar-brand" href="#">M3U IPTV Viewer</a>
+        <a class="navbar-brand" href="#" id="navBarTitle">M3U IPTV Viewer</a>
         <div class="d-flex mx-auto my-2 my-lg-0">
             <form class="me-2" id="fileForm">
                 <input accept=".m3u" class="form-control bg-light text-dark" id="fileInput" type="file">
             </form>
             <button class="btn btn-outline-secondary" id="processButton" type="button">Process</button>
+        </div>
+        <div class="nav-item dropdown d-flex align-items-center me-2">
+            <!-- https://emojipedia.org/flags -->
+            <button aria-expanded="false" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown"
+                    id="localeDropdown">
+                <span class="flag-emoji" id="actualFlag">🇬🇧</span>
+                <span id="actualName">English</span>
+            </button>
+            <ul aria-labelledby="localeDropdown" class="dropdown-menu dropdown-menu-light"
+                id="localeDropdownOptions">
+                <li>
+                    <a class="dropdown-item" data-flag="🇬🇧" data-lang="en" href="#">🇬🇧 English</a>
+                </li>
+                <li>
+                    <a class="dropdown-item" data-flag="🇪🇸" data-lang="es" href="#">🇪🇸 Español</a>
+                </li>
+            </ul>
         </div>
         <div class="d-flex align-items-center mb-0">
             <label class="me-2" id="sunLabel">☀️</label>
@@ -69,27 +86,30 @@
 </nav>
 <!-- Main content -->
 <div class="flex-grow-1 bg-light text-black" id="mainContainer"></div>
-<!-- Invalid File Modal -->
+<!-- Modal -->
 <div aria-hidden="true" aria-labelledby="staticBackdropModal" class="modal fade"
-     data-bs-backdrop="static" data-bs-keyboard="false" id="invalidFileModal" tabindex="-1">
+     data-bs-backdrop="static" data-bs-keyboard="false" id="messageModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content bg-light text-black">
             <div class="modal-header">
-                <h1 class="modal-title fs-5 mx-auto" id="staticBackdropModal">Invalid M3U file</h1>
+                <h1 class="modal-title fs-5 mx-auto" id="staticBackdropModal">Modal Title</h1>
             </div>
-            <div class="modal-body">
-                The M3U file you wish to process is invalid or incompatible.
+            <div class="modal-body" id="staticBackdropModalDescription">
+                Modal description.
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" data-bs-dismiss="modal" type="button">Accept</button>
+                <button class="btn btn-primary" data-bs-dismiss="modal" id="staticBackdropModalButton" type="button">
+                    Button
+                </button>
             </div>
         </div>
     </div>
 </div>
+<!-- Footer -->
 <footer class="footer text-center p-3 bg-light text-black">
     <a class="text-decoration-none" href="https://github.com/MinionAttack/m3u-iptv-viewer" rel="noreferrer"
        target="_blank">
-        See this project on
+        <span id="footerDescription">See this project on</span>
         <svg class="bi bi-github icon" height="16" viewBox="0 0 16 16" width="16"
              xmlns="http://www.w3.org/2000/svg">
             <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
@@ -99,6 +119,8 @@
 <!-- JavaScript -->
 <script src="/js/vendor/bootstrap/bootstrap.bundle.min.js"></script>
 <script src="/js/themeManager.js"></script>
+<script src="/js/i18nManager.js"></script>
+<script src="/js/modalManager.js"></script>
 <script src="/js/fileValidator.js"></script>
 <script src="/js/main.js"></script>
 </body>

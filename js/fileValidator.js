@@ -11,9 +11,8 @@ async function validateFileFormat(event, fileForm, processButton) {
     } else {
         fileForm.reset();
         manageButtonStatus(processButton, true, 'btn-outline-secondary', 'btn-outline-success');
-        const invalidFileModalOptions = {backdrop: 'static', keyboard: false, focus: true}
-        const invalidFileModal = document.getElementById('invalidFileModal');
-        const invalidBootstrapModal = new bootstrap.Modal(invalidFileModal, invalidFileModalOptions);
+        const invalidFileModalOptions = {backdrop: 'static', keyboard: false, focus: true};
+        const invalidBootstrapModal = createModal(invalidFileModalOptions, ModalTypes.INVALID_FILE);
         invalidBootstrapModal.show();
     }
 }
