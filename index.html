@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html data-bs-theme="light" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -47,25 +47,25 @@
     <link href="/css/vendor/bootstrap/bootstrap.min.css" rel="stylesheet"/>
     <link href="/css/theme.css" rel="stylesheet"/>
 </head>
-<body class="d-flex flex-column min-vh-100" data-bs-theme="light">
+<body class="d-flex flex-column min-vh-100">
 <!-- Navbar -->
-<nav class="navbar navbar-light bg-light text-black" id="topNavbar">
+<nav class="navbar">
     <div class="container-fluid d-flex flex-wrap align-items-center">
         <a class="navbar-brand" href="#" id="navBarTitle">M3U IPTV Viewer</a>
         <div class="d-flex mx-auto my-2 my-lg-0">
             <form class="me-2" id="fileForm">
-                <input accept=".m3u" class="form-control bg-light text-dark" id="fileInput" type="file">
+                <input accept=".m3u" class="form-control" id="fileInput" type="file">
             </form>
             <button class="btn btn-outline-secondary" id="processButton" type="button">Process</button>
         </div>
         <div class="nav-item dropdown d-flex align-items-center me-2">
             <!-- https://emojipedia.org/flags -->
-            <button aria-expanded="false" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown"
+            <button aria-expanded="false" class="btn dropdown-toggle" data-bs-toggle="dropdown"
                     id="localeDropdown">
                 <span class="flag-emoji" id="actualFlag">🇬🇧</span>
                 <span id="actualName">English</span>
             </button>
-            <ul aria-labelledby="localeDropdown" class="dropdown-menu dropdown-menu-light"
+            <ul aria-labelledby="localeDropdown" class="dropdown-menu"
                 id="localeDropdownOptions">
                 <li>
                     <a class="dropdown-item" data-flag="🇬🇧" data-lang="en" href="#">🇬🇧 English</a>
@@ -85,12 +85,12 @@
     </div>
 </nav>
 <!-- Main content -->
-<div class="flex-grow-1 bg-light text-black" id="mainContainer"></div>
+<div class="flex-grow-1" id="mainContainer"></div>
 <!-- Modal -->
 <div aria-hidden="true" aria-labelledby="staticBackdropModal" class="modal fade"
      data-bs-backdrop="static" data-bs-keyboard="false" id="messageModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content bg-light text-black">
+        <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5 mx-auto" id="staticBackdropModal">Modal Title</h1>
             </div>
@@ -106,7 +106,7 @@
     </div>
 </div>
 <!-- Footer -->
-<footer class="footer text-center p-3 bg-light text-black">
+<footer class="footer text-center p-3">
     <a class="text-decoration-none" href="https://github.com/MinionAttack/m3u-iptv-viewer" rel="noreferrer"
        target="_blank">
         <span id="footerDescription">See this project on</span>
