@@ -8,13 +8,11 @@ async function validateFileFormat(event, fileForm, processButton) {
     let firstTwoLines = await readFile(file);
     const isValid = checkFirstTwoLines(firstTwoLines);
     if (isValid) {
-        console.info('The M3U file is valid!');
         manageButtonStatus(processButton, false, 'btn-outline-success', 'btn-outline-secondary');
     } else {
         fileForm.reset();
         manageButtonStatus(processButton, true, 'btn-outline-secondary', 'btn-outline-success');
-        const invalidFileModalOptions = {backdrop: 'static', keyboard: false, focus: true};
-        const invalidBootstrapModal = createModal(invalidFileModalOptions, ModalTypes.INVALID_FILE);
+        const invalidBootstrapModal = createModal(ModalOptions.DEFAULT, ModalTypes.INVALID_FILE);
         invalidBootstrapModal.show();
     }
 }
@@ -37,7 +35,9 @@ async function readFile(file, preview = true) {
     try {
         while (true) {
             const {value, done} = await reader.read();
-            if (done) break;
+            if (done) {
+                break;
+            }
             const text = decoder?.decode(value, {stream: true});
             const full = leftover + text;
             let lines = '';
@@ -76,6 +76,27 @@ function checkFirstTwoLines(lines) {
         return lines[0]?.startsWith('#EXTM3U') && lines[1]?.startsWith('#EXTINF:');
     }
     return false;
+}
+
+function processFile(event, fileSelector) {
+    manageButtonStatus(event.target, true, 'btn-outline-secondary', 'btn-outline-success');
+    const file = fileSelector?.files[0];
+    if (file) {
+        const processFileModal = createModal(ModalOptions.DEFAULT, ModalTypes.PROCESS_FILE);
+        processFileModal.show();
+        readFile(file, false)
+            .then(() => {
+                // TODO
+            })
+            .catch(error => {
+                console.error('Error processing the file:', error)
+            })
+            .finally(() => {
+                const currentLocale = localStorage.getItem('selectedLocale');
+                enableModalCloseButton(currentLocale, ModalTypes.PROCESS_FILE);
+                fileSelector.value = '';
+            });
+    }
 }
 
 function processChannelEntry(channelData) {

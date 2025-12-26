@@ -22,18 +22,19 @@ document.addEventListener('DOMContentLoaded', function () {
     if (savedSelectedLocale) {
         applyPreferredLocale(savedSelectedLocale);
     } else {
-        // Reject locales with a hyphen, for example: en-US, es-ES.
+        // Reject locales with a hyphen (en-US or es-ES).
         const preferredLocales = navigator.languages.filter(language => !language.includes('-'));
         findPreferredBrowserLocales(preferredLocales);
     }
     addListenerToLocaleOptions();
 
     const processButton = document.getElementById('processButton');
-    if (processButton) {
-        processButton.disabled = true;
-    }
-
     const fileForm = document.getElementById('fileForm');
     const fileSelector = document.getElementById('fileInput');
+
+    if (processButton) {
+        processButton.disabled = true;
+        processButton.addEventListener('click', (event) => processFile(event, fileSelector))
+    }
     fileSelector.addEventListener('change', (event) => validateFileFormat(event, fileForm, processButton));
 });

@@ -2,6 +2,8 @@
 
 const locales = new Set(['en', 'es']);
 
+const modalSections = new Set(['title', 'description', 'button']);
+
 const localeStrings = {
     en: {
         navBarTexts: {navBarTitleText: 'M3U IPTV Viewer', processButtonText: 'Process'},
@@ -10,6 +12,11 @@ const localeStrings = {
                 staticBackdropModalText: 'Invalid M3U file',
                 staticBackdropModalDescriptionText: 'The M3U file you wish to process is invalid or incompatible.',
                 staticBackdropModalButtonText: 'Accept'
+            },
+            processFileTexts: {
+                staticBackdropModalText: 'Processing M3U file',
+                staticBackdropModalDescriptionText: 'Please wait until the file processing is complete.',
+                staticBackdropModalButtonText: 'Close'
             }
         },
         footerTexts: {footerDescriptionText: 'See this project on'}
@@ -21,6 +28,11 @@ const localeStrings = {
                 staticBackdropModalText: 'Fichero M3U no válido',
                 staticBackdropModalDescriptionText: 'El fichero M3U que desea procesar no es válido o es incompatible.',
                 staticBackdropModalButtonText: 'Aceptar'
+            },
+            processFileTexts: {
+                staticBackdropModalText: 'Procesando archivo M3U',
+                staticBackdropModalDescriptionText: 'Por favor, espere a que el procesado del fichero termine.',
+                staticBackdropModalButtonText: 'Cerrar'
             }
         },
         footerTexts: {footerDescriptionText: 'Vea este proyecto en'}
@@ -84,13 +96,26 @@ function updateNavBarTexts(selectedLocale) {
     processButton.textContent = localeStrings[selectedLocale].navBarTexts.processButtonText;
 }
 
-function updateModalTexts(selectedLocale, modalType) {
+function updateModalTexts(selectedLocale, modalType, sections = modalSections) {
     const modalTitle = document.getElementById('staticBackdropModal');
     const modalDescription = document.getElementById('staticBackdropModalDescription');
     const modalButton = document.getElementById('staticBackdropModalButton');
-    modalTitle.textContent = localeStrings[selectedLocale].modalTexts[modalType].staticBackdropModalText;
-    modalDescription.textContent = localeStrings[selectedLocale].modalTexts[modalType].staticBackdropModalDescriptionText;
-    modalButton.textContent = localeStrings[selectedLocale].modalTexts[modalType].staticBackdropModalButtonText;
+
+    for (const section of sections) {
+        switch (section) {
+            case 'title':
+                modalTitle.textContent = localeStrings[selectedLocale].modalTexts[modalType].staticBackdropModalText;
+                break;
+            case 'description':
+                modalDescription.textContent = localeStrings[selectedLocale].modalTexts[modalType].staticBackdropModalDescriptionText;
+                break;
+            case 'button':
+                modalButton.textContent = localeStrings[selectedLocale].modalTexts[modalType].staticBackdropModalButtonText;
+                break;
+            default:
+                console.error(`Unsupported modal section ${section}`);
+        }
+    }
 }
 
 function updateFooterTexts(selectedLocale) {
