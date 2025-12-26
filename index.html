@@ -54,7 +54,8 @@
         <a class="navbar-brand" href="#" id="navBarTitle">M3U IPTV Viewer</a>
         <div class="d-flex mx-auto my-2 my-lg-0">
             <form class="me-2" id="fileForm">
-                <input accept=".m3u" class="form-control" id="fileInput" type="file">
+                <input accept=".m3u, .m3u8, application/x-mpegurl, application/vnd.apple.mpegurl"
+                       class="form-control" id="fileInput" type="file">
             </form>
             <button class="btn btn-outline-secondary" id="processButton" type="button">Process</button>
         </div>
@@ -121,7 +122,7 @@
 <script src="/js/themeManager.js"></script>
 <script src="/js/i18nManager.js"></script>
 <script src="/js/modalManager.js"></script>
-<script src="/js/fileValidator.js"></script>
+<script src="/js/fileManager.js"></script>
 <script src="/js/main.js"></script>
 </body>
 </html>

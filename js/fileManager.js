@@ -2,8 +2,10 @@
 
 async function validateFileFormat(event, fileForm, processButton) {
     const file = event.target.files[0];
-    if (!file) return false;
-    let firstTwoLines = await readFirstTwoLines(file);
+    if (!file) {
+        return false;
+    }
+    let firstTwoLines = await readFile(file);
     const isValid = checkFirstTwoLines(firstTwoLines);
     if (isValid) {
         console.info('The M3U file is valid!');
@@ -17,7 +19,17 @@ async function validateFileFormat(event, fileForm, processButton) {
     }
 }
 
-async function readFirstTwoLines(file) {
+function manageButtonStatus(button, isDisabled, classToAdd, classToRemove) {
+    button.disabled = isDisabled;
+    if (button.classList.contains(classToRemove)) {
+        button.classList.remove(classToRemove);
+    }
+    if (!button.classList.contains(classToAdd)) {
+        button.classList.add(classToAdd);
+    }
+}
+
+async function readFile(file, preview = true) {
     // https://medium.com/@AlexanderObregon/parsing-large-files-in-the-browser-using-javascript-streams-api-78cb88f30d23
     const decoder = new TextDecoder('utf-8');
     const reader = file?.stream().getReader();
@@ -28,12 +40,24 @@ async function readFirstTwoLines(file) {
             if (done) break;
             const text = decoder?.decode(value, {stream: true});
             const full = leftover + text;
-            const lines = full.split(/\r?\n/, 2).filter(line => '' !== line);
-            if (lines?.length === 2) {
-                return lines.slice(0, 2);
+            let lines = '';
+            if (preview) {
+                lines = full.split(/\r?\n/, 2).filter(line => '' !== line);
+                if (lines?.length === 2) {
+                    return lines.slice(0, 2);
+                }
+                return [];
+            } else {
+                lines = full.split(/\r?\n/).filter(line => '' !== line);
+                leftover = lines.pop();
+                for (const line of lines) {
+                    processChannelEntry(line);
+                }
             }
-            leftover = lines.pop();
             await new Promise(resolve => requestAnimationFrame(resolve));
+        }
+        if (!preview && leftover) {
+            processChannelEntry(leftover);
         }
     } catch (error) {
         console.error('Error reading the file to check if it is valid:', error);
@@ -49,18 +73,11 @@ async function readFirstTwoLines(file) {
 function checkFirstTwoLines(lines) {
     // https://en.wikipedia.org/wiki/M3U
     if (lines?.length === 2) {
-        const FIRST_LINE_REGEX = /^#EXTM3U$/;
-        return FIRST_LINE_REGEX.test(lines[0]) && lines[1]?.startsWith('#EXTINF:');
+        return lines[0]?.startsWith('#EXTM3U') && lines[1]?.startsWith('#EXTINF:');
     }
     return false;
 }
 
-function manageButtonStatus(button, isDisabled, classToAdd, classToRemove) {
-    button.disabled = isDisabled;
-    if (button.classList.contains(classToRemove)) {
-        button.classList.remove(classToRemove);
-    }
-    if (!button.classList.contains(classToAdd)) {
-        button.classList.add(classToAdd);
-    }
+function processChannelEntry(channelData) {
+    // TODO
 }
