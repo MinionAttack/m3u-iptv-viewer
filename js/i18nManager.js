@@ -6,38 +6,72 @@ const modalSections = new Set(['title', 'description', 'button']);
 
 const localeStrings = {
     en: {
-        navBarTexts: {navBarTitleText: 'M3U IPTV Viewer', processButtonText: 'Process'},
+        navBarTexts: {
+            navBarTitleText: 'M3U IPTV Viewer',
+            processButtonText: 'Process',
+        },
         modalTexts: {
+            localeSelectionTexts: {
+                staticBackdropModalText: 'Language selection',
+                staticBackdropModalDescriptionText: 'There was a problem saving the new language you selected. Please check your browser\'s console.',
+                staticBackdropModalButtonText: 'Accept',
+            },
             invalidFileTexts: {
                 staticBackdropModalText: 'Invalid M3U file',
                 staticBackdropModalDescriptionText: 'The M3U file you wish to process is invalid or incompatible.',
-                staticBackdropModalButtonText: 'Accept'
+                staticBackdropModalButtonText: 'Accept',
+            },
+            databaseOperationTexts: {
+                staticBackdropModalText: 'Database management',
+                staticBackdropModalDescriptionText: 'There was a problem trying to operate with the database. Please check your browser\'s console.',
+                staticBackdropModalButtonText: 'Accept',
             },
             processFileTexts: {
-                staticBackdropModalText: 'Processing M3U file',
-                staticBackdropModalDescriptionText: 'Please wait until the file processing is complete.',
-                staticBackdropModalButtonText: 'Close'
+                staticBackdropModalText: 'M3U file processing',
+                staticBackdropModalDescriptionText: 'Please wait until the file processing is complete. The duration depends on the size of the file.',
+                staticBackdropModalButtonText: 'Close',
             }
         },
-        footerTexts: {footerDescriptionText: 'See this project on'}
+        footerTexts: {
+            footerDescriptionText: 'See this project on',
+        },
     },
     es: {
-        navBarTexts: {navBarTitleText: 'Visor de M3U para IPTV', processButtonText: 'Procesar'},
+        navBarTexts: {
+            navBarTitleText: 'Visor de M3U para IPTV',
+            processButtonText: 'Procesar',
+        },
         modalTexts: {
+            localeSelectionTexts: {
+                staticBackdropModalText: 'Selección del idioma',
+                staticBackdropModalDescriptionText: 'Hubo un problema al guardar el nuevo idioma seleccionado. Por favor, revise la consola del navegador.',
+                staticBackdropModalButtonText: 'Aceptar',
+            },
             invalidFileTexts: {
                 staticBackdropModalText: 'Fichero M3U no válido',
                 staticBackdropModalDescriptionText: 'El fichero M3U que desea procesar no es válido o es incompatible.',
-                staticBackdropModalButtonText: 'Aceptar'
+                staticBackdropModalButtonText: 'Aceptar',
+            },
+            databaseOperationTexts: {
+                staticBackdropModalText: 'Gestión de la base de datos',
+                staticBackdropModalDescriptionText: 'Hubo un problema al intentar operar con la base de datos. Por favor, revise la consola del navegador.',
+                staticBackdropModalButtonText: 'Aceptar',
             },
             processFileTexts: {
-                staticBackdropModalText: 'Procesando archivo M3U',
-                staticBackdropModalDescriptionText: 'Por favor, espere a que el procesado del fichero termine.',
-                staticBackdropModalButtonText: 'Cerrar'
+                staticBackdropModalText: 'Procesado del archivo M3U',
+                staticBackdropModalDescriptionText: 'Por favor, espere a que el procesado del fichero termine. La duración depende de lo grande que sea el fichero.',
+                staticBackdropModalButtonText: 'Cerrar',
             }
         },
-        footerTexts: {footerDescriptionText: 'Vea este proyecto en'}
-    }
+        footerTexts: {
+            footerDescriptionText: 'Vea este proyecto en',
+        },
+    },
 };
+
+const modalTitle = document.getElementById('staticBackdropModal');
+const modalDescription = document.getElementById('staticBackdropModalDescription');
+const modalButton = document.getElementById('staticBackdropModalButton');
 
 const localeOptions = document.getElementById('localeDropdownOptions');
 
@@ -80,7 +114,13 @@ function addListenerToLocaleOptions() {
 function changeLocale(selectedLocale, languageFlag, languageName) {
     document.getElementById("actualFlag").textContent = languageFlag;
     document.getElementById("actualName").textContent = languageName;
-    localStorage.setItem("selectedLocale", selectedLocale);
+    try {
+        localStorage.setItem("selectedLocale", selectedLocale);
+    } catch (error) {
+        console.error(`Unable to save the new locale value: ${error}`);
+        const changeLocaleModal = createModal(ModalOptions.DEFAULT, ModalTypes.LOCALE_SELECTION);
+        changeLocaleModal.show();
+    }
     updateApplicationTexts(selectedLocale);
 }
 
@@ -97,10 +137,6 @@ function updateNavBarTexts(selectedLocale) {
 }
 
 function updateModalTexts(selectedLocale, modalType, sections = modalSections) {
-    const modalTitle = document.getElementById('staticBackdropModal');
-    const modalDescription = document.getElementById('staticBackdropModalDescription');
-    const modalButton = document.getElementById('staticBackdropModalButton');
-
     for (const section of sections) {
         switch (section) {
             case 'title':
