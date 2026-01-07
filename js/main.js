@@ -31,10 +31,42 @@ document.addEventListener('DOMContentLoaded', function () {
     const processButton = document.getElementById('processButton');
     const fileForm = document.getElementById('fileForm');
     const fileSelector = document.getElementById('fileInput');
-
     if (processButton) {
         processButton.disabled = true;
         processButton.addEventListener('click', (event) => processFile(event, fileSelector))
     }
     fileSelector.addEventListener('change', (event) => validateFileFormat(event, fileForm, processButton));
+
+    checkDatabaseExists()
+        .then(exists => {
+            if (exists) {
+                const loadChannelsModal = createModal(ModalOptions.DEFAULT, ModalTypes.LOAD_CHANNELS);
+                loadChannelsModal.show();
+                connectToDB()
+                    .then(() => {
+                        restoreSavedChannels((channelsBatch) => processChannelBatch(channelsBatch))
+                            .then(() => {
+                                console.info('Channels loaded successfully');
+                                showElement('searchBox');
+                            })
+                            .catch(error => {
+                                console.error(`Error loading channels: ${error}`);
+                            })
+                            .finally(() => {
+                                const currentLocale = localStorage.getItem('selectedLocale');
+                                enableModalCloseButton(currentLocale, ModalTypes.LOAD_CHANNELS);
+                            });
+                    })
+                    .catch(error => {
+                        console.error(`Error connecting to the database: ${error}`);
+                        const connectDatabaseModal = createModal(ModalOptions.DEFAULT, ModalTypes.DATABASE_OPERATION);
+                        connectDatabaseModal.show();
+                    });
+            }
+        })
+        .catch(error => {
+            console.error(`Error checking if the database exists: ${error}`);
+            const checkDatabaseModal = createModal(ModalOptions.DEFAULT, ModalTypes.DATABASE_OPERATION);
+            checkDatabaseModal.show();
+        });
 });

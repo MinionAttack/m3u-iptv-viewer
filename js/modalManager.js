@@ -6,6 +6,7 @@ const ModalTypes = Object.freeze({
     LOCALE_SELECTION: Symbol('localeSelectionTexts'),
     INVALID_FILE: Symbol('invalidFileTexts'),
     DATABASE_OPERATION: Symbol('databaseOperationTexts'),
+    LOAD_CHANNELS: Symbol('loadChannelsTexts'),
     PROCESS_FILE: Symbol('processFileTexts'),
 });
 
@@ -24,6 +25,10 @@ function createModal(options, type) {
             break;
         case ModalTypes.DATABASE_OPERATION:
             updateModalTexts(currentLocale, ModalTypes.DATABASE_OPERATION.description);
+            break;
+        case ModalTypes.LOAD_CHANNELS:
+            updateModalTexts(currentLocale, ModalTypes.LOAD_CHANNELS.description);
+            animateModalCloseButton();
             break;
         case ModalTypes.PROCESS_FILE:
             updateModalTexts(currentLocale, ModalTypes.PROCESS_FILE.description, new Set(['title', 'description']));

@@ -10,6 +10,9 @@ const localeStrings = {
             navBarTitleText: 'M3U IPTV Viewer',
             processButtonText: 'Process',
         },
+        searchBoxTexts: {
+            placeholderText: 'Search for a channel by name, group, or subgroup',
+        },
         modalTexts: {
             localeSelectionTexts: {
                 staticBackdropModalText: 'Language selection',
@@ -26,11 +29,16 @@ const localeStrings = {
                 staticBackdropModalDescriptionText: 'There was a problem trying to operate with the database. Please check your browser\'s console.',
                 staticBackdropModalButtonText: 'Accept',
             },
+            loadChannelsTexts: {
+                staticBackdropModalText: 'Saved data has been detected',
+                staticBackdropModalDescriptionText: 'There are channels saved from a previous load. Please wait while the channels are loading.',
+                staticBackdropModalButtonText: 'Close',
+            },
             processFileTexts: {
                 staticBackdropModalText: 'M3U file processing',
                 staticBackdropModalDescriptionText: 'Please wait until the file processing is complete. The duration depends on the size of the file.',
                 staticBackdropModalButtonText: 'Close',
-            }
+            },
         },
         footerTexts: {
             footerDescriptionText: 'See this project on',
@@ -40,6 +48,9 @@ const localeStrings = {
         navBarTexts: {
             navBarTitleText: 'Visor de M3U para IPTV',
             processButtonText: 'Procesar',
+        },
+        searchBoxTexts: {
+            placeholderText: 'Busque un canal por nombre, grupo o subgrupo',
         },
         modalTexts: {
             localeSelectionTexts: {
@@ -57,11 +68,16 @@ const localeStrings = {
                 staticBackdropModalDescriptionText: 'Hubo un problema al intentar operar con la base de datos. Por favor, revise la consola del navegador.',
                 staticBackdropModalButtonText: 'Aceptar',
             },
+            loadChannelsTexts: {
+                staticBackdropModalText: 'Se han detectado datos guardados',
+                staticBackdropModalDescriptionText: 'Hay canales guardados de una carga previa. Por favor, espere mientras se cargan los canales.',
+                staticBackdropModalButtonText: 'Cerrar',
+            },
             processFileTexts: {
                 staticBackdropModalText: 'Procesado del archivo M3U',
                 staticBackdropModalDescriptionText: 'Por favor, espere a que el procesado del fichero termine. La duración depende de lo grande que sea el fichero.',
                 staticBackdropModalButtonText: 'Cerrar',
-            }
+            },
         },
         footerTexts: {
             footerDescriptionText: 'Vea este proyecto en',
@@ -126,27 +142,45 @@ function changeLocale(selectedLocale, languageFlag, languageName) {
 
 function updateApplicationTexts(selectedLocale) {
     updateNavBarTexts(selectedLocale);
+    updateSearchBoxTexts(selectedLocale);
     updateFooterTexts(selectedLocale);
 }
 
 function updateNavBarTexts(selectedLocale) {
     const navBarTitle = document.getElementById('navBarTitle');
     const processButton = document.getElementById('processButton');
-    navBarTitle.textContent = localeStrings[selectedLocale].navBarTexts.navBarTitleText;
-    processButton.textContent = localeStrings[selectedLocale].navBarTexts.processButtonText;
+    if (navBarTitle) {
+        navBarTitle.textContent = localeStrings[selectedLocale].navBarTexts.navBarTitleText;
+    }
+    if (processButton) {
+        processButton.textContent = localeStrings[selectedLocale].navBarTexts.processButtonText;
+    }
+}
+
+function updateSearchBoxTexts(selectedLocale) {
+    const searchBox = document.getElementById('searchBox');
+    if (searchBox) {
+        searchBox.placeholder = localeStrings[selectedLocale].searchBoxTexts.placeholderText;
+    }
 }
 
 function updateModalTexts(selectedLocale, modalType, sections = modalSections) {
     for (const section of sections) {
         switch (section) {
             case 'title':
-                modalTitle.textContent = localeStrings[selectedLocale].modalTexts[modalType].staticBackdropModalText;
+                if (modalTitle) {
+                    modalTitle.textContent = localeStrings[selectedLocale].modalTexts[modalType].staticBackdropModalText;
+                }
                 break;
             case 'description':
-                modalDescription.textContent = localeStrings[selectedLocale].modalTexts[modalType].staticBackdropModalDescriptionText;
+                if (modalDescription) {
+                    modalDescription.textContent = localeStrings[selectedLocale].modalTexts[modalType].staticBackdropModalDescriptionText;
+                }
                 break;
             case 'button':
-                modalButton.textContent = localeStrings[selectedLocale].modalTexts[modalType].staticBackdropModalButtonText;
+                if (modalButton) {
+                    modalButton.textContent = localeStrings[selectedLocale].modalTexts[modalType].staticBackdropModalButtonText;
+                }
                 break;
             default:
                 console.error(`Unsupported modal section ${section}`);
@@ -156,5 +190,7 @@ function updateModalTexts(selectedLocale, modalType, sections = modalSections) {
 
 function updateFooterTexts(selectedLocale) {
     const footerDescription = document.getElementById('footerDescription');
-    footerDescription.textContent = localeStrings[selectedLocale].footerTexts.footerDescriptionText;
+    if (footerDescription) {
+        footerDescription.textContent = localeStrings[selectedLocale].footerTexts.footerDescriptionText;
+    }
 }

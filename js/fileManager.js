@@ -9,6 +9,7 @@ async function validateFileFormat(event, fileForm, processButton) {
             changeStatusModalCloseButton(processButton, false, 'btn-outline-success', 'btn-outline-secondary');
         } else {
             fileForm.reset();
+            hideElement('searchBox');
             changeStatusModalCloseButton(processButton, true, 'btn-outline-secondary', 'btn-outline-success');
             const invalidBootstrapModal = createModal(ModalOptions.DEFAULT, ModalTypes.INVALID_FILE);
             invalidBootstrapModal.show();
@@ -56,11 +57,11 @@ async function readFile(file, preview = true) {
         const endTime = performance.now();
         extendedConvertMilliseconds(endTime - startTime, 'Parsing and insertion completed in');
     } catch (error) {
-        console.error('Error reading the file to check if it is valid:', error);
+        console.error(`Error reading the file to check if it is valid: ${error}`);
     } finally {
         decoder.decode(); // Flush any leftover characters.
         reader.cancel().catch(error => {
-            console.warn('Error cancelling stream reading:', error);
+            console.warn(`Error cancelling stream reading: ${error}`);
         });
     }
     return preview ? allLines.slice(0, 2) : [];
@@ -102,10 +103,10 @@ function doProcessing(file, fileSelector) {
     processFileModal.show();
     readFile(file, false)
         .then(() => {
-            // TODO
+            // TODO: create card and fetch logo
         })
         .catch(error => {
-            console.error('Error processing the file:', error)
+            console.error(`Error processing the file: ${error}`);
         })
         .finally(() => {
             const currentLocale = localStorage.getItem('selectedLocale');

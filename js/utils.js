@@ -31,3 +31,17 @@ function convertMilliseconds(ms) {
         seconds: seconds,
     };
 }
+
+function showElement(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.classList.remove('d-none');
+    }
+}
+
+function hideElement(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.classList.add('d-none');
+    }
+}

@@ -27,7 +27,6 @@ function connectToDB() {
             resolve(db);
         };
         request.onerror = (event) => {
-            console.error(`Error connecting to the database: ${event.target.error}`);
             reject(event.target.error);
         };
     });
@@ -80,12 +79,16 @@ function insertChannelData(channelData) {
     });
 }
 
-/*
-Example of use:
+function checkDatabaseExists() {
+    return indexedDB.databases()
+        .then(databases => {
+            return databases.some(database => DB_NAME === database.name);
+        });
+}
 
-restoreSavedChannels((channelsBatch) => {
+const processChannelBatch = (channelsBatch) => {
     // Use requestAnimationFrame to wait for the browser to be ready to paint and avoid blocking the user interface.
-    window.requestAnimationFrame(() => {
+    return globalThis.requestAnimationFrame(() => {
         // Create a DocumentFragment in memory and do a single appendChild at the end of the batch. This avoids
         // ‘Reflow’ (layout recalculation) for each element.
         const fragment = document.createDocumentFragment();
@@ -96,14 +99,10 @@ restoreSavedChannels((channelsBatch) => {
             fragment.appendChild(div);
         });
         // Print all batch in a single DOM operation
-        document.getElementById('container').appendChild(fragment);
+        //document.getElementById('channelsContainer').appendChild(fragment);
     });
-}).then(() => {
-    console.info('All channels have been restored');
-}).catch(err => {
-    console.error(err);
-});
-*/
+}
+
 function restoreSavedChannels(callback) {
     return new Promise((resolve, reject) => {
         if (!db) {
