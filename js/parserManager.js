@@ -9,6 +9,8 @@ const M3U_SECTION = Object.freeze({
 
 const LINE_REGEX = /(tvg-name|tvg-logo|tvg-id|group-title)="([^"]*)"/g;
 
+const URL_CATEGORY_REGEX = /\/live\/|\/series\/|\/movie\//;
+
 let pendingChannelData = null;
 
 async function processChannelEntries(entries) {
@@ -18,7 +20,8 @@ async function processChannelEntries(entries) {
                 if (entry.startsWith('#EXTINF')) {
                     pendingChannelData = parseChannelInfo(entry);
                 } else {
-                    const fullChannelData = {...pendingChannelData, url: entry};
+                    const category = parseCategoryFromURL(entry);
+                    const fullChannelData = {...pendingChannelData, url: entry, category: category};
                     await insertChannelData(fullChannelData);
                     pendingChannelData = null;
                 }
@@ -35,6 +38,7 @@ function parseChannelInfo(channelInfo) {
         group: '',
         subgroup: '',
         url: '',
+        category: '',
     };
     const matches = channelInfo.matchAll(LINE_REGEX);
     for (const match of matches) {
@@ -83,4 +87,22 @@ function parseGroupTag(groupTagValue) {
             }
         }
     }
+}
+
+function parseCategoryFromURL(url) {
+    const match = url.match(URL_CATEGORY_REGEX);
+    if (match?.length) {
+        switch (match[0]) {
+            case '/live/':
+                return 'live';
+            case '/series/':
+                return 'series';
+            case '/movie/':
+                return 'movie';
+            default:
+                // It is likely to be a public file with only free television channels
+                return 'live';
+        }
+    }
+    return 'live';
 }

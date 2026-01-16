@@ -6,6 +6,13 @@ const STORE_NAME = 'channelsData';
 
 let db = null;
 
+function checkDatabaseExists() {
+    return indexedDB.databases()
+        .then(databases => {
+            return databases.some(database => DB_NAME === database.name);
+        });
+}
+
 function connectToDB() {
     return new Promise((resolve, reject) => {
         if (db) {
@@ -20,6 +27,7 @@ function connectToDB() {
                 store.createIndex('idx_tvgName', 'tvgName', {unique: false});
                 store.createIndex('idx_group', 'group', {unique: false});
                 store.createIndex('idx_subgroup', 'subgroup', {unique: false});
+                store.createIndex('idx_category', 'category', {unique: false});
             }
         };
         request.onsuccess = (event) => {
@@ -79,30 +87,6 @@ function insertChannelData(channelData) {
     });
 }
 
-function checkDatabaseExists() {
-    return indexedDB.databases()
-        .then(databases => {
-            return databases.some(database => DB_NAME === database.name);
-        });
-}
-
-const processChannelBatch = (channelsBatch) => {
-    // Use requestAnimationFrame to wait for the browser to be ready to paint and avoid blocking the user interface.
-    return globalThis.requestAnimationFrame(() => {
-        // Create a DocumentFragment in memory and do a single appendChild at the end of the batch. This avoids
-        // ‘Reflow’ (layout recalculation) for each element.
-        const fragment = document.createDocumentFragment();
-        channelsBatch.forEach(channel => {
-            // TODO: create card and fetch logo
-            const div = document.createElement('div');
-            div.textContent = channel.name;
-            fragment.appendChild(div);
-        });
-        // Print all batch in a single DOM operation
-        //document.getElementById('channelsContainer').appendChild(fragment);
-    });
-}
-
 function restoreSavedChannels(callback) {
     return new Promise((resolve, reject) => {
         if (!db) {
@@ -134,6 +118,32 @@ function restoreSavedChannels(callback) {
         };
         transaction.onerror = (event) => {
             reject(new Error(`Error in the transaction to restore the channels: ${event.target.error}`));
+        };
+    });
+}
+
+function checkAvailableContentForSearch() {
+    return new Promise((resolve, reject) => {
+        if (!db) {
+            return reject(new Error('There is no open connection to the database.'));
+        }
+        const transaction = db.transaction([STORE_NAME], 'readonly');
+        const store = transaction.objectStore(STORE_NAME);
+        const index = store.index("idx_category");
+        const findings = {live: false, series: false, movie: false};
+        const categories = Object.keys(findings);
+        for (const category of categories) {
+            index.getKey(category).onsuccess = (e) => {
+                if (e.target.result !== undefined) {
+                    findings[category] = true;
+                }
+            };
+        }
+        transaction.oncomplete = () => {
+            resolve(findings);
+        };
+        transaction.onerror = (event) => {
+            reject(new Error(`Error in the transaction to check the available content for search: ${event.target.error}`));
         };
     });
 }

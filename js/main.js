@@ -37,6 +37,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     fileSelector.addEventListener('change', (event) => validateFileFormat(event, fileForm, processButton));
 
+    addListenersToSearchBoxSwitches(['tvSwitch', 'tvSeriesSwitch', 'moviesSwitch']);
+
     checkDatabaseExists()
         .then(exists => {
             if (exists) {
@@ -47,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         restoreSavedChannels((channelsBatch) => processChannelBatch(channelsBatch))
                             .then(() => {
                                 console.info('Channels loaded successfully');
-                                showElement('searchBox');
+                                doContentAvailabilityCheck();
                             })
                             .catch(error => {
                                 console.error(`Error loading channels: ${error}`);

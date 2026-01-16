@@ -9,7 +9,7 @@ async function validateFileFormat(event, fileForm, processButton) {
             changeStatusModalCloseButton(processButton, false, 'btn-outline-success', 'btn-outline-secondary');
         } else {
             fileForm.reset();
-            hideElement('searchBox');
+            hideElement('searchBoxContainer');
             changeStatusModalCloseButton(processButton, true, 'btn-outline-secondary', 'btn-outline-success');
             const invalidBootstrapModal = createModal(ModalOptions.DEFAULT, ModalTypes.INVALID_FILE);
             invalidBootstrapModal.show();
@@ -76,7 +76,9 @@ function processFile(event, fileSelector) {
                 deleteDatabase()
                     .then(() =>
                         connectToDB()
-                            .then(() => doProcessing(file, fileSelector))
+                            .then(() => {
+                                doProcessing(file, fileSelector);
+                            })
                             .catch(error => {
                                 console.error(`Error connecting to the database: ${error}`);
                                 const connectDatabaseModal = createModal(ModalOptions.DEFAULT, ModalTypes.DATABASE_OPERATION);
@@ -103,6 +105,7 @@ function doProcessing(file, fileSelector) {
     processFileModal.show();
     readFile(file, false)
         .then(() => {
+            doContentAvailabilityCheck();
             // TODO: create card and fetch logo
         })
         .catch(error => {

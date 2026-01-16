@@ -86,9 +86,35 @@
 </nav>
 <!-- Main content -->
 <div class="flex-grow-1" id="mainContainer">
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center d-none" id="searchBoxContainer">
+        <div class="d-flex mt-2">
+            <div class="form-check form-switch me-3">
+                <input aria-checked="false" class="form-check-input" id="tvSwitch" role="switch" switch type="checkbox"
+                       value="tvChannels">
+                <label class="form-check-label" for="tvSwitch">
+                    <span>📺</span>
+                    <span id="tvSwitchLabelText">TV Channels</span>
+                </label>
+            </div>
+            <div class="form-check form-switch me-3">
+                <input aria-checked="false" class="form-check-input" id="tvSeriesSwitch" role="switch" switch
+                       type="checkbox" value="series">
+                <label class="form-check-label" for="tvSeriesSwitch">
+                    <span>🎬</span>
+                    <span id="tvSeriesSwitchLabelText">TV Series</span>
+                </label>
+            </div>
+            <div class="form-check form-switch me-3">
+                <input aria-checked="false" class="form-check-input" id="moviesSwitch" role="switch" switch
+                       type="checkbox" value="movies">
+                <label class="form-check-label" for="moviesSwitch">
+                    <span>📽️</span>
+                    <span id="moviesSwitchLabelText">Movies</span>
+                </label>
+            </div>
+        </div>
         <div class="w-25">
-            <input aria-label="Search" class="form-control d-none" id="searchBox"
+            <input aria-label="Search" class="form-control" id="searchBox"
                    placeholder="Search a channel by name, group or subgroup" type="search"/>
         </div>
     </div>

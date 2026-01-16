@@ -11,7 +11,12 @@ const localeStrings = {
             processButtonText: 'Process',
         },
         searchBoxTexts: {
-            placeholderText: 'Search for a channel by name, group, or subgroup',
+            placeholderText: 'Search by name, group, or subgroup',
+        },
+        searchBoxSwitchesTexts: {
+            tv: 'TV Channels',
+            tvSeries: 'TV Series',
+            movies: 'Movies',
         },
         modalTexts: {
             localeSelectionTexts: {
@@ -31,7 +36,7 @@ const localeStrings = {
             },
             loadChannelsTexts: {
                 staticBackdropModalText: 'Saved data has been detected',
-                staticBackdropModalDescriptionText: 'There are channels saved from a previous load. Please wait while the channels are loading.',
+                staticBackdropModalDescriptionText: 'There is data saved from a previous load. Please wait while the data is loaded.',
                 staticBackdropModalButtonText: 'Close',
             },
             processFileTexts: {
@@ -50,7 +55,12 @@ const localeStrings = {
             processButtonText: 'Procesar',
         },
         searchBoxTexts: {
-            placeholderText: 'Busque un canal por nombre, grupo o subgrupo',
+            placeholderText: 'Busque por nombre, grupo o subgrupo',
+        },
+        searchBoxSwitchesTexts: {
+            tv: 'Canales de TV',
+            tvSeries: 'Series de TV',
+            movies: 'Películas',
         },
         modalTexts: {
             localeSelectionTexts: {
@@ -70,7 +80,7 @@ const localeStrings = {
             },
             loadChannelsTexts: {
                 staticBackdropModalText: 'Se han detectado datos guardados',
-                staticBackdropModalDescriptionText: 'Hay canales guardados de una carga previa. Por favor, espere mientras se cargan los canales.',
+                staticBackdropModalDescriptionText: 'Hay datos guardados de una carga previa. Por favor, espere mientras se cargan los datos.',
                 staticBackdropModalButtonText: 'Cerrar',
             },
             processFileTexts: {
@@ -142,6 +152,7 @@ function changeLocale(selectedLocale, languageFlag, languageName) {
 
 function updateApplicationTexts(selectedLocale) {
     updateNavBarTexts(selectedLocale);
+    updateSearchSwitchTexts(selectedLocale);
     updateSearchBoxTexts(selectedLocale);
     updateFooterTexts(selectedLocale);
 }
@@ -154,6 +165,21 @@ function updateNavBarTexts(selectedLocale) {
     }
     if (processButton) {
         processButton.textContent = localeStrings[selectedLocale].navBarTexts.processButtonText;
+    }
+}
+
+function updateSearchSwitchTexts(selectedLocale) {
+    const tvSwitch = document.getElementById('tvSwitchLabelText');
+    const tvSeriesSwitch = document.getElementById('tvSeriesSwitchLabelText');
+    const moviesSwitch = document.getElementById('moviesSwitchLabelText');
+    if (tvSwitch) {
+        tvSwitch.textContent = localeStrings[selectedLocale].searchBoxSwitchesTexts.tv;
+    }
+    if (tvSeriesSwitch) {
+        tvSeriesSwitch.textContent = localeStrings[selectedLocale].searchBoxSwitchesTexts.tvSeries;
+    }
+    if (moviesSwitch) {
+        moviesSwitch.textContent = localeStrings[selectedLocale].searchBoxSwitchesTexts.movies;
     }
 }
 
