@@ -2,30 +2,116 @@
 
 const locales = new Set(['en', 'es']);
 
+const modalSections = new Set(['title', 'description', 'button']);
+
 const localeStrings = {
     en: {
-        navBarTexts: {navBarTitleText: 'M3U IPTV Viewer', processButtonText: 'Process'},
+        navBarTexts: {
+            navBarTitleText: 'M3U IPTV Viewer',
+            processButtonText: 'Process',
+        },
+        searchBoxTexts: {
+            placeholderText: 'Search by name, group, or subgroup',
+        },
+        searchBoxSwitchesTexts: {
+            tv: 'TV Channels',
+            tvSeries: 'TV Series',
+            movies: 'Movies',
+        },
         modalTexts: {
+            localeSelectionTexts: {
+                staticBackdropModalText: 'Language selection',
+                staticBackdropModalDescriptionText: 'There was a problem saving the new language you selected. Please check your browser\'s console.',
+                staticBackdropModalButtonText: 'Accept',
+            },
             invalidFileTexts: {
                 staticBackdropModalText: 'Invalid M3U file',
                 staticBackdropModalDescriptionText: 'The M3U file you wish to process is invalid or incompatible.',
-                staticBackdropModalButtonText: 'Accept'
-            }
+                staticBackdropModalButtonText: 'Accept',
+            },
+            databaseOperationTexts: {
+                staticBackdropModalText: 'Database management',
+                staticBackdropModalDescriptionText: 'There was a problem trying to operate with the database. Please check your browser\'s console.',
+                staticBackdropModalButtonText: 'Accept',
+            },
+            loadChannelsTexts: {
+                staticBackdropModalText: 'Saved data has been detected',
+                staticBackdropModalDescriptionText: 'There is data saved from a previous load. You can start searching now.',
+                staticBackdropModalButtonText: 'Close',
+            },
+            processFileTexts: {
+                staticBackdropModalText: 'M3U file processing',
+                staticBackdropModalDescriptionText: 'Please wait until the file processing is complete. The duration depends on the size of the file.',
+                staticBackdropModalButtonText: 'Close',
+            },
         },
-        footerTexts: {footerDescriptionText: 'See this project on'}
+        cardTexts: {
+            cardCategoryText: 'Category:',
+            cardLogoAltText: 'Logo',
+            cardGroupText: 'Group:',
+            cardSubgroupText: 'Subgroup:',
+            cardCopyIconText: 'Copy link',
+        },
+        footerTexts: {
+            footerDescriptionText: 'See this project on',
+        },
     },
     es: {
-        navBarTexts: {navBarTitleText: 'Visor de M3U para IPTV', processButtonText: 'Procesar'},
+        navBarTexts: {
+            navBarTitleText: 'Visor de M3U para IPTV',
+            processButtonText: 'Procesar',
+        },
+        searchBoxTexts: {
+            placeholderText: 'Busque por nombre, grupo o subgrupo',
+        },
+        searchBoxSwitchesTexts: {
+            tv: 'Canales de TV',
+            tvSeries: 'Series de TV',
+            movies: 'Películas',
+        },
         modalTexts: {
+            localeSelectionTexts: {
+                staticBackdropModalText: 'Selección del idioma',
+                staticBackdropModalDescriptionText: 'Hubo un problema al guardar el nuevo idioma seleccionado. Por favor, revise la consola del navegador.',
+                staticBackdropModalButtonText: 'Aceptar',
+            },
             invalidFileTexts: {
                 staticBackdropModalText: 'Fichero M3U no válido',
                 staticBackdropModalDescriptionText: 'El fichero M3U que desea procesar no es válido o es incompatible.',
-                staticBackdropModalButtonText: 'Aceptar'
-            }
+                staticBackdropModalButtonText: 'Aceptar',
+            },
+            databaseOperationTexts: {
+                staticBackdropModalText: 'Gestión de la base de datos',
+                staticBackdropModalDescriptionText: 'Hubo un problema al intentar operar con la base de datos. Por favor, revise la consola del navegador.',
+                staticBackdropModalButtonText: 'Aceptar',
+            },
+            loadChannelsTexts: {
+                staticBackdropModalText: 'Se han detectado datos guardados',
+                staticBackdropModalDescriptionText: 'Hay datos guardados de una carga previa. Puede comenzar a buscar ahora.',
+                staticBackdropModalButtonText: 'Cerrar',
+            },
+            processFileTexts: {
+                staticBackdropModalText: 'Procesado del archivo M3U',
+                staticBackdropModalDescriptionText: 'Por favor, espere a que el procesado del fichero termine. La duración depende de lo grande que sea el fichero.',
+                staticBackdropModalButtonText: 'Cerrar',
+            },
         },
-        footerTexts: {footerDescriptionText: 'Vea este proyecto en'}
-    }
+        cardTexts: {
+            cardCategoryText: 'Categoría:',
+            cardLogoAltText: 'Logotipo',
+            cardGroupText: 'Grupo:',
+            cardSubgroupText: 'Subgrupo:',
+            cardCopyIconText: 'Copiar enlace',
+        },
+        footerTexts: {
+            footerDescriptionText: 'Vea este proyecto en',
+        },
+    },
 };
+
+const modalTitle = document.getElementById('staticBackdropModal');
+const modalDescription = document.getElementById('staticBackdropModalDescription');
+const modalButton = document.getElementById('staticBackdropModalButton');
 
 const localeOptions = document.getElementById('localeDropdownOptions');
 
@@ -68,32 +154,116 @@ function addListenerToLocaleOptions() {
 function changeLocale(selectedLocale, languageFlag, languageName) {
     document.getElementById("actualFlag").textContent = languageFlag;
     document.getElementById("actualName").textContent = languageName;
-    localStorage.setItem("selectedLocale", selectedLocale);
+    try {
+        localStorage.setItem("selectedLocale", selectedLocale);
+    } catch (error) {
+        console.error(`Unable to save the new locale value: ${error}`);
+        const changeLocaleModal = createModal(ModalOptions.DEFAULT, ModalTypes.LOCALE_SELECTION);
+        changeLocaleModal.show();
+    }
     updateApplicationTexts(selectedLocale);
 }
 
 function updateApplicationTexts(selectedLocale) {
     updateNavBarTexts(selectedLocale);
+    updateSearchSwitchTexts(selectedLocale);
+    updateSearchBoxTexts(selectedLocale);
+    updateCardTexts(selectedLocale);
     updateFooterTexts(selectedLocale);
 }
 
 function updateNavBarTexts(selectedLocale) {
     const navBarTitle = document.getElementById('navBarTitle');
     const processButton = document.getElementById('processButton');
-    navBarTitle.textContent = localeStrings[selectedLocale].navBarTexts.navBarTitleText;
-    processButton.textContent = localeStrings[selectedLocale].navBarTexts.processButtonText;
+    if (navBarTitle) {
+        navBarTitle.textContent = localeStrings[selectedLocale].navBarTexts.navBarTitleText;
+    }
+    if (processButton) {
+        processButton.textContent = localeStrings[selectedLocale].navBarTexts.processButtonText;
+    }
 }
 
-function updateModalTexts(selectedLocale, modalType) {
-    const modalTitle = document.getElementById('staticBackdropModal');
-    const modalDescription = document.getElementById('staticBackdropModalDescription');
-    const modalButton = document.getElementById('staticBackdropModalButton');
-    modalTitle.textContent = localeStrings[selectedLocale].modalTexts[modalType].staticBackdropModalText;
-    modalDescription.textContent = localeStrings[selectedLocale].modalTexts[modalType].staticBackdropModalDescriptionText;
-    modalButton.textContent = localeStrings[selectedLocale].modalTexts[modalType].staticBackdropModalButtonText;
+function updateSearchSwitchTexts(selectedLocale) {
+    const tvSwitch = document.getElementById('tvSwitchLabelText');
+    const tvSeriesSwitch = document.getElementById('tvSeriesSwitchLabelText');
+    const moviesSwitch = document.getElementById('moviesSwitchLabelText');
+    if (tvSwitch) {
+        tvSwitch.textContent = localeStrings[selectedLocale].searchBoxSwitchesTexts.tv;
+    }
+    if (tvSeriesSwitch) {
+        tvSeriesSwitch.textContent = localeStrings[selectedLocale].searchBoxSwitchesTexts.tvSeries;
+    }
+    if (moviesSwitch) {
+        moviesSwitch.textContent = localeStrings[selectedLocale].searchBoxSwitchesTexts.movies;
+    }
+}
+
+function updateSearchBoxTexts(selectedLocale) {
+    const searchBox = document.getElementById('searchBox');
+    if (searchBox) {
+        searchBox.placeholder = localeStrings[selectedLocale].searchBoxTexts.placeholderText;
+    }
+}
+
+function updateModalTexts(selectedLocale, modalType, sections = modalSections) {
+    for (const section of sections) {
+        switch (section) {
+            case 'title':
+                if (modalTitle) {
+                    modalTitle.textContent = localeStrings[selectedLocale].modalTexts[modalType].staticBackdropModalText;
+                }
+                break;
+            case 'description':
+                if (modalDescription) {
+                    modalDescription.textContent = localeStrings[selectedLocale].modalTexts[modalType].staticBackdropModalDescriptionText;
+                }
+                break;
+            case 'button':
+                if (modalButton) {
+                    modalButton.textContent = localeStrings[selectedLocale].modalTexts[modalType].staticBackdropModalButtonText;
+                }
+                break;
+            default:
+                console.error(`Unsupported modal section ${section}`);
+        }
+    }
+}
+
+function updateCardTexts(selectedLocale) {
+    const cards = document.querySelectorAll('.card');
+    for (const card of cards) {
+        const cardLogo = card.querySelector("[id^='logo-']");
+        const cardCategory = card.querySelector("[id^='category-']");
+        const cardGroup = card.querySelector("[id^='group-']");
+        const cardSubgroup = card.querySelector("[id^='subgroup-']");
+        updateCardLogoText(selectedLocale, cardLogo);
+        updateCardBodySectionText(cardCategory, localeStrings[selectedLocale].cardTexts.cardCategoryText);
+        updateCardBodySectionText(cardGroup, localeStrings[selectedLocale].cardTexts.cardGroupText);
+        updateCardBodySectionText(cardSubgroup, localeStrings[selectedLocale].cardTexts.cardSubgroupText);
+    }
+}
+
+function updateCardLogoText(selectedLocale, cardLogo) {
+    if (cardLogo) {
+        const logoAlt = cardLogo.getAttribute('alt');
+        const lastSpaceIndex = logoAlt.lastIndexOf(" ") === -1 ? 0 : logoAlt.lastIndexOf(" ");
+        const channelName = logoAlt.substring(0, lastSpaceIndex);
+        cardLogo.alt = `${channelName} ${localeStrings[selectedLocale].cardTexts.cardLogoAltText}`;
+    }
+}
+
+function updateCardBodySectionText(bodySection, bodySectionText) {
+    if (bodySection) {
+        const channelSectionText = bodySection.textContent.split(': ', 2);
+        if (channelSectionText.length === 2) {
+            bodySection.textContent = `${bodySectionText} ${channelSectionText[1]}`;
+        }
+    }
 }
 
 function updateFooterTexts(selectedLocale) {
     const footerDescription = document.getElementById('footerDescription');
-    footerDescription.textContent = localeStrings[selectedLocale].footerTexts.footerDescriptionText;
+    if (footerDescription) {
+        footerDescription.textContent = localeStrings[selectedLocale].footerTexts.footerDescriptionText;
+    }
 }

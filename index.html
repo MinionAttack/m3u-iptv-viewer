@@ -40,11 +40,12 @@
     <!-- Colours and theme for mobiles -->
     <meta content="#ffffff" name="theme-color"> <!-- Chrome, Android -->
     <meta content="#2d89ef" name="msapplication-TileColor"> <!-- Windows -->
-    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="mobile-web-app-capable">
     <meta content="default" name="apple-mobile-web-app-status-bar-style">
 
     <!-- CSS -->
     <link href="/css/vendor/bootstrap/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/css/vendor/bootstrap/bootstrap-icons.min.css" rel="stylesheet"/>
     <link href="/css/theme.css" rel="stylesheet"/>
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -60,14 +61,13 @@
             <button class="btn btn-outline-secondary" id="processButton" type="button">Process</button>
         </div>
         <div class="nav-item dropdown d-flex align-items-center me-2">
-            <!-- https://emojipedia.org/flags -->
             <button aria-expanded="false" class="btn dropdown-toggle" data-bs-toggle="dropdown"
                     id="localeDropdown">
                 <span class="flag-emoji" id="actualFlag">🇬🇧</span>
                 <span id="actualName">English</span>
             </button>
-            <ul aria-labelledby="localeDropdown" class="dropdown-menu"
-                id="localeDropdownOptions">
+            <ul aria-labelledby="localeDropdown" class="dropdown-menu" id="localeDropdownOptions">
+                <!-- https://emojipedia.org/flags -->
                 <li>
                     <a class="dropdown-item" data-flag="🇬🇧" data-lang="en" href="#">🇬🇧 English</a>
                 </li>
@@ -86,21 +86,56 @@
     </div>
 </nav>
 <!-- Main content -->
-<div class="flex-grow-1" id="mainContainer"></div>
+<div class="flex-grow-1" id="mainContainer">
+    <div class="d-flex justify-content-center d-none" id="searchBoxContainer">
+        <div class="d-flex mt-2">
+            <div class="form-check form-switch me-3">
+                <input aria-checked="false" class="form-check-input" id="tvSwitch" role="switch" switch type="checkbox"
+                       value="tvChannels">
+                <label class="form-check-label" for="tvSwitch">
+                    <span>📺</span>
+                    <span id="tvSwitchLabelText">TV Channels</span>
+                </label>
+            </div>
+            <div class="form-check form-switch me-3">
+                <input aria-checked="false" class="form-check-input" id="tvSeriesSwitch" role="switch" switch
+                       type="checkbox" value="series">
+                <label class="form-check-label" for="tvSeriesSwitch">
+                    <span>🎬</span>
+                    <span id="tvSeriesSwitchLabelText">TV Series</span>
+                </label>
+            </div>
+            <div class="form-check form-switch me-3">
+                <input aria-checked="false" class="form-check-input" id="moviesSwitch" role="switch" switch
+                       type="checkbox" value="movies">
+                <label class="form-check-label" for="moviesSwitch">
+                    <span>📽️</span>
+                    <span id="moviesSwitchLabelText">Movies</span>
+                </label>
+            </div>
+        </div>
+        <div class="w-25">
+            <input aria-label="Search" class="form-control" id="searchBox"
+                   placeholder="Search a channel by name, group or subgroup" type="search"/>
+        </div>
+    </div>
+    <div class="d-flex flex-wrap justify-content-center mt-3 gap-3" id="channelsContainer"></div>
+</div>
 <!-- Modal -->
 <div aria-hidden="true" aria-labelledby="staticBackdropModal" class="modal fade"
      data-bs-backdrop="static" data-bs-keyboard="false" id="messageModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5 mx-auto" id="staticBackdropModal">Modal Title</h1>
+                <h1 class="modal-title fs-5 mx-auto" id="staticBackdropModal">
+                    Modal Title
+                </h1>
             </div>
             <div class="modal-body" id="staticBackdropModalDescription">
                 Modal description.
             </div>
             <div class="modal-footer">
                 <button class="btn btn-primary" data-bs-dismiss="modal" id="staticBackdropModalButton" type="button">
-                    Button
                 </button>
             </div>
         </div>
@@ -119,9 +154,13 @@
 </footer>
 <!-- JavaScript -->
 <script src="/js/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/js/utils.js"></script>
 <script src="/js/themeManager.js"></script>
 <script src="/js/i18nManager.js"></script>
 <script src="/js/modalManager.js"></script>
+<script src="/js/networkManager.js"></script>
+<script src="/js/databaseManager.js"></script>
+<script src="/js/parserManager.js"></script>
 <script src="/js/fileManager.js"></script>
 <script src="/js/main.js"></script>
 </body>

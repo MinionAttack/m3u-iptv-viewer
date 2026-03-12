@@ -44,5 +44,9 @@ function updateTheme(toggle) {
 }
 
 function saveThemePreference(selectedMode) {
-    localStorage.setItem('themeMode', selectedMode);
+    try {
+        localStorage.setItem('themeMode', selectedMode);
+    } catch (error) {
+        console.error(`Unable to save the new theme value: ${selectedMode}`);
+    }
 }

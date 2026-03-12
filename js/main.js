@@ -22,18 +22,69 @@ document.addEventListener('DOMContentLoaded', function () {
     if (savedSelectedLocale) {
         applyPreferredLocale(savedSelectedLocale);
     } else {
-        // Reject locales with a hyphen, for example: en-US, es-ES.
+        // Reject locales with a hyphen (en-US or es-ES).
         const preferredLocales = navigator.languages.filter(language => !language.includes('-'));
         findPreferredBrowserLocales(preferredLocales);
     }
     addListenerToLocaleOptions();
 
     const processButton = document.getElementById('processButton');
-    if (processButton) {
-        processButton.disabled = true;
-    }
-
     const fileForm = document.getElementById('fileForm');
     const fileSelector = document.getElementById('fileInput');
+    if (processButton) {
+        processButton.disabled = true;
+        processButton.addEventListener('click', (event) => processFile(event, fileSelector))
+    }
     fileSelector.addEventListener('change', (event) => validateFileFormat(event, fileForm, processButton));
+
+    addListenersToSearchBoxSwitches(['tvSwitch', 'tvSeriesSwitch', 'moviesSwitch']);
+
+    let timeout;
+    const searchBox = document.getElementById('searchBox');
+    searchBox.addEventListener('input', (event) => {
+        let searchText = event?.target?.value?.trim();
+        if (searchText) {
+            searchText = searchText.toLowerCase();
+            clearTimeout(timeout);
+            if (searchText.length < 2) {
+                return;
+            }
+            timeout = setTimeout(() => {
+                searchChannels(searchText)
+                    .then(channelsBatch => {
+                        clearAllChannels();
+                        processChannelBatch(channelsBatch, savedSelectedLocale);
+                    })
+                    .catch(error => {
+                        console.error(`Error searching channels: ${error}`);
+                    });
+            }, 300);
+        }
+    });
+
+    checkDatabaseExists()
+        .then(exists => {
+            if (exists) {
+                connectToDB()
+                    .then(() => {
+                        doContentAvailabilityCheck();
+                    })
+                    .catch(error => {
+                        console.error(`Error connecting to the database: ${error}`);
+                        const connectDatabaseModal = createModal(ModalOptions.DEFAULT, ModalTypes.DATABASE_OPERATION);
+                        connectDatabaseModal.show();
+                    })
+                    .finally(() => {
+                        const loadChannelsModal = createModal(ModalOptions.DEFAULT, ModalTypes.LOAD_CHANNELS);
+                        loadChannelsModal.show();
+                        const searchBox = document.getElementById('searchBox');
+                        searchBox.value = '';
+                    });
+            }
+        })
+        .catch(error => {
+            console.error(`Error checking if the database exists: ${error}`);
+            const checkDatabaseModal = createModal(ModalOptions.DEFAULT, ModalTypes.DATABASE_OPERATION);
+            checkDatabaseModal.show();
+        });
 });
