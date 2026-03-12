@@ -36,7 +36,7 @@ const localeStrings = {
             },
             loadChannelsTexts: {
                 staticBackdropModalText: 'Saved data has been detected',
-                staticBackdropModalDescriptionText: 'There is data saved from a previous load. Please wait while the data is loaded.',
+                staticBackdropModalDescriptionText: 'There is data saved from a previous load. You can start searching now.',
                 staticBackdropModalButtonText: 'Close',
             },
             processFileTexts: {
@@ -44,6 +44,13 @@ const localeStrings = {
                 staticBackdropModalDescriptionText: 'Please wait until the file processing is complete. The duration depends on the size of the file.',
                 staticBackdropModalButtonText: 'Close',
             },
+        },
+        cardTexts: {
+            cardCategoryText: 'Category:',
+            cardLogoAltText: 'Logo',
+            cardGroupText: 'Group:',
+            cardSubgroupText: 'Subgroup:',
+            cardCopyIconText: 'Copy link',
         },
         footerTexts: {
             footerDescriptionText: 'See this project on',
@@ -80,7 +87,7 @@ const localeStrings = {
             },
             loadChannelsTexts: {
                 staticBackdropModalText: 'Se han detectado datos guardados',
-                staticBackdropModalDescriptionText: 'Hay datos guardados de una carga previa. Por favor, espere mientras se cargan los datos.',
+                staticBackdropModalDescriptionText: 'Hay datos guardados de una carga previa. Puede comenzar a buscar ahora.',
                 staticBackdropModalButtonText: 'Cerrar',
             },
             processFileTexts: {
@@ -88,6 +95,13 @@ const localeStrings = {
                 staticBackdropModalDescriptionText: 'Por favor, espere a que el procesado del fichero termine. La duración depende de lo grande que sea el fichero.',
                 staticBackdropModalButtonText: 'Cerrar',
             },
+        },
+        cardTexts: {
+            cardCategoryText: 'Categoría:',
+            cardLogoAltText: 'Logotipo',
+            cardGroupText: 'Grupo:',
+            cardSubgroupText: 'Subgrupo:',
+            cardCopyIconText: 'Copiar enlace',
         },
         footerTexts: {
             footerDescriptionText: 'Vea este proyecto en',
@@ -154,6 +168,7 @@ function updateApplicationTexts(selectedLocale) {
     updateNavBarTexts(selectedLocale);
     updateSearchSwitchTexts(selectedLocale);
     updateSearchBoxTexts(selectedLocale);
+    updateCardTexts(selectedLocale);
     updateFooterTexts(selectedLocale);
 }
 
@@ -210,6 +225,38 @@ function updateModalTexts(selectedLocale, modalType, sections = modalSections) {
                 break;
             default:
                 console.error(`Unsupported modal section ${section}`);
+        }
+    }
+}
+
+function updateCardTexts(selectedLocale) {
+    const cards = document.querySelectorAll('.card');
+    for (const card of cards) {
+        const cardLogo = card.querySelector("[id^='logo-']");
+        const cardCategory = card.querySelector("[id^='category-']");
+        const cardGroup = card.querySelector("[id^='group-']");
+        const cardSubgroup = card.querySelector("[id^='subgroup-']");
+        updateCardLogoText(selectedLocale, cardLogo);
+        updateCardBodySectionText(cardCategory, localeStrings[selectedLocale].cardTexts.cardCategoryText);
+        updateCardBodySectionText(cardGroup, localeStrings[selectedLocale].cardTexts.cardGroupText);
+        updateCardBodySectionText(cardSubgroup, localeStrings[selectedLocale].cardTexts.cardSubgroupText);
+    }
+}
+
+function updateCardLogoText(selectedLocale, cardLogo) {
+    if (cardLogo) {
+        const logoAlt = cardLogo.getAttribute('alt');
+        const lastSpaceIndex = logoAlt.lastIndexOf(" ") === -1 ? 0 : logoAlt.lastIndexOf(" ");
+        const channelName = logoAlt.substring(0, lastSpaceIndex);
+        cardLogo.alt = `${channelName} ${localeStrings[selectedLocale].cardTexts.cardLogoAltText}`;
+    }
+}
+
+function updateCardBodySectionText(bodySection, bodySectionText) {
+    if (bodySection) {
+        const channelSectionText = bodySection.textContent.split(': ', 2);
+        if (channelSectionText.length === 2) {
+            bodySection.textContent = `${bodySectionText} ${channelSectionText[1]}`;
         }
     }
 }

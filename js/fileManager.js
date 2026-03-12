@@ -10,6 +10,7 @@ async function validateFileFormat(event, fileForm, processButton) {
         } else {
             fileForm.reset();
             hideElement('searchBoxContainer');
+            clearAllChannels();
             changeStatusModalCloseButton(processButton, true, 'btn-outline-secondary', 'btn-outline-success');
             const invalidBootstrapModal = createModal(ModalOptions.DEFAULT, ModalTypes.INVALID_FILE);
             invalidBootstrapModal.show();
@@ -103,15 +104,18 @@ function processFile(event, fileSelector) {
 function doProcessing(file, fileSelector) {
     const processFileModal = createModal(ModalOptions.DEFAULT, ModalTypes.PROCESS_FILE);
     processFileModal.show();
+    hideElement('searchBoxContainer');
+    clearAllChannels();
     readFile(file, false)
         .then(() => {
             doContentAvailabilityCheck();
-            // TODO: create card and fetch logo
         })
         .catch(error => {
             console.error(`Error processing the file: ${error}`);
         })
         .finally(() => {
+            const searchBox = document.getElementById('searchBox');
+            searchBox.value = '';
             const currentLocale = localStorage.getItem('selectedLocale');
             enableModalCloseButton(currentLocale, ModalTypes.PROCESS_FILE);
             fileSelector.value = '';

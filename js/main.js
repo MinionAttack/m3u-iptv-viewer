@@ -39,30 +39,46 @@ document.addEventListener('DOMContentLoaded', function () {
 
     addListenersToSearchBoxSwitches(['tvSwitch', 'tvSeriesSwitch', 'moviesSwitch']);
 
+    let timeout;
+    const searchBox = document.getElementById('searchBox');
+    searchBox.addEventListener('input', (event) => {
+        let searchText = event?.target?.value?.trim();
+        if (searchText) {
+            searchText = searchText.toLowerCase();
+            clearTimeout(timeout);
+            if (searchText.length < 2) {
+                return;
+            }
+            timeout = setTimeout(() => {
+                searchChannels(searchText)
+                    .then(channelsBatch => {
+                        clearAllChannels();
+                        processChannelBatch(channelsBatch, savedSelectedLocale);
+                    })
+                    .catch(error => {
+                        console.error(`Error searching channels: ${error}`);
+                    });
+            }, 300);
+        }
+    });
+
     checkDatabaseExists()
         .then(exists => {
             if (exists) {
-                const loadChannelsModal = createModal(ModalOptions.DEFAULT, ModalTypes.LOAD_CHANNELS);
-                loadChannelsModal.show();
                 connectToDB()
                     .then(() => {
-                        restoreSavedChannels((channelsBatch) => processChannelBatch(channelsBatch))
-                            .then(() => {
-                                console.info('Channels loaded successfully');
-                                doContentAvailabilityCheck();
-                            })
-                            .catch(error => {
-                                console.error(`Error loading channels: ${error}`);
-                            })
-                            .finally(() => {
-                                const currentLocale = localStorage.getItem('selectedLocale');
-                                enableModalCloseButton(currentLocale, ModalTypes.LOAD_CHANNELS);
-                            });
+                        doContentAvailabilityCheck();
                     })
                     .catch(error => {
                         console.error(`Error connecting to the database: ${error}`);
                         const connectDatabaseModal = createModal(ModalOptions.DEFAULT, ModalTypes.DATABASE_OPERATION);
                         connectDatabaseModal.show();
+                    })
+                    .finally(() => {
+                        const loadChannelsModal = createModal(ModalOptions.DEFAULT, ModalTypes.LOAD_CHANNELS);
+                        loadChannelsModal.show();
+                        const searchBox = document.getElementById('searchBox');
+                        searchBox.value = '';
                     });
             }
         })

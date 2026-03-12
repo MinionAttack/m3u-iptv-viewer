@@ -28,7 +28,6 @@ function createModal(options, type) {
             break;
         case ModalTypes.LOAD_CHANNELS:
             updateModalTexts(currentLocale, ModalTypes.LOAD_CHANNELS.description);
-            animateModalCloseButton();
             break;
         case ModalTypes.PROCESS_FILE:
             updateModalTexts(currentLocale, ModalTypes.PROCESS_FILE.description, new Set(['title', 'description']));
