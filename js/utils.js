@@ -155,7 +155,7 @@ function createCardImageElement(selectedLocale, id, name) {
         cardImage.id = `logo-${id}`;
     }
     cardImage.classList.add('card-img-top', 'channel-logo');
-    cardImage.alt = `${name} ${localeStrings[selectedLocale].cardTexts.cardLogoAltText}`;
+    cardImage.alt = `${name} ${localeStrings.cardTexts.cardLogoAltText[selectedLocale]}`;
     cardImage.src = '../images/http_cat_no_content.jpg';
     return cardImage;
 }
@@ -180,21 +180,21 @@ function createCardDescriptionElement(selectedLocale, id, category, group, subgr
     if (category) {
         const descriptionCategoryItem = document.createElement('span');
         descriptionCategoryItem.id = `category-${id}`;
-        descriptionCategoryItem.textContent = `${localeStrings[selectedLocale].cardTexts.cardCategoryText} ${category}`;
+        descriptionCategoryItem.textContent = `${localeStrings.cardTexts.cardCategoryText[selectedLocale]} ${category}`;
         cardDescription.appendChild(descriptionCategoryItem);
     }
     if (group) {
         cardDescription.appendChild(separator.cloneNode(false));
         const descriptionGroupItem = document.createElement('span');
         descriptionGroupItem.id = `group-${id}`;
-        descriptionGroupItem.textContent = `${localeStrings[selectedLocale].cardTexts.cardGroupText} ${group}`;
+        descriptionGroupItem.textContent = `${localeStrings.cardTexts.cardGroupText[selectedLocale]} ${group}`;
         cardDescription.appendChild(descriptionGroupItem);
     }
     if (subgroup) {
         cardDescription.appendChild(separator.cloneNode(false));
         const descriptionSubgroupItem = document.createElement('span');
         descriptionSubgroupItem.id = `subgroup-${id}`;
-        descriptionSubgroupItem.textContent = `${localeStrings[selectedLocale].cardTexts.cardSubgroupText} ${subgroup}`;
+        descriptionSubgroupItem.textContent = `${localeStrings.cardTexts.cardSubgroupText[selectedLocale]} ${subgroup}`;
         cardDescription.appendChild(descriptionSubgroupItem);
     }
     return cardDescription;
@@ -204,7 +204,7 @@ function createCardButtonElement(selectedLocale, url) {
     const cardButton = document.createElement('button');
     cardButton.type = 'button';
     cardButton.classList.add('button', 'btn-outline-primary', 'd-block', 'mx-auto', 'rounded', 'mb-3', 'copy-icon-width');
-    cardButton.ariaLabel = `${localeStrings[selectedLocale].cardTexts.cardCopyIconText}`;
+    cardButton.ariaLabel = `${localeStrings.cardTexts.cardCopyIconText[selectedLocale]}`;
     cardButton.dataset.url = url;
     const cardIcon = document.createElement('i');
     cardIcon.classList.add('bi', 'bi-clipboard');
