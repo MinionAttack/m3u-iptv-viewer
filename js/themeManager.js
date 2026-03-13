@@ -47,6 +47,6 @@ function saveThemePreference(selectedMode) {
     try {
         localStorage.setItem('themeMode', selectedMode);
     } catch (error) {
-        console.error(`Unable to save the new theme value: ${selectedMode}`);
+        console.error(`Unable to save the new theme value ${selectedMode}: ${error}`);
     }
 }
